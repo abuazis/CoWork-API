@@ -25,6 +25,22 @@ const logout = {
   }),
 };
 
+/// Send verification validation request
+const sendVerification = {
+  body: Joi.object().keys({
+    userId: Joi.string().required(),
+    email: Joi.string().required(),
+  }),
+};
+
+/// Check verification validation request
+const checkVerification = {
+  body: Joi.object().keys({
+    userId: Joi.string().required(),
+    code: Joi.number().required().min(1000).max(9999),
+  }),
+};
+
 /// Refresh token validation request
 const refreshTokens = {
   body: Joi.object().keys({
@@ -53,6 +69,8 @@ module.exports = {
   register,
   login,
   logout,
+  sendVerification,
+  checkVerification,
   refreshTokens,
   forgotPassword,
   resetPassword,

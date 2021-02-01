@@ -2,7 +2,7 @@ const httpStatus = require("http-status");
 const userService = require("./user.service");
 const tokenService = require("./token.service");
 const ApiError = require("../utils/ApiError");
-const { Token } = require("../models");
+const { Token, User } = require("../models");
 const { tokenTypes } = require("../config/tokens");
 
 /// Login user account with email and password
@@ -11,10 +11,13 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");
   }
+  if (!(await User.isEmailVerified(email))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Your email is not verified");
+  }
   return user;
 };
 
-/// Push logging out user account 
+/// Push logging out user account
 const logout = async (refreshToken) => {
   const refreshTokenDoc = await Token.findOne({
     token: refreshToken,
@@ -24,16 +27,16 @@ const logout = async (refreshToken) => {
   if (!refreshToken) {
     throw new ApiError(httpStatus.NOT_FOUND, "Not Found");
   }
-  await refreshTokenDoc.remove();
+  await refreshTokenDoc.remove(userId, email);
 };
 
-/// Refresh authenticated user token refresh 
+/// Refresh authenticated user token refresh
 const refreshAuth = async (refreshToken) => {
   try {
     const refreshTokenDoc = await tokenService.verifyToken(
       refreshToken,
       tokenTypes.REFRESH
-    );                                                  
+    );
     const user = await userService.getUserById(refreshTokenDoc.user);
     if (!user) {
       throw new Error();

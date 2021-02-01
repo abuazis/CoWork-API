@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const config = require("../config/config");
 const logger = require("../config/logger");
+const { verificationService } = require(".");
 
 /// Define nodemailer transport smpt configuration
 const transport = nodemailer.createTransport(config.email.smtp);
@@ -22,6 +23,13 @@ const sendEmail = async (to, subject, text) => {
   await transport.sendMail(msg);
 };
 
+/// Send verification code to email address
+const sendVerificationCode = async (email, code) => {
+  const subject = 'Verification Code';
+  const text = `Dear user, Your verification code is ${code} will be expires in 30 minutes`;
+  await sendEmail(email, subject, text);
+};
+
 /// Define subject, url, and message, then send reset password link
 const sendResetPasswordEmail = async (to, token) => {
   const subject = 'Reset Password';
@@ -33,5 +41,6 @@ const sendResetPasswordEmail = async (to, token) => {
 module.exports = {
   transport,
   sendEmail,
+  sendVerificationCode,
   sendResetPasswordEmail,
 };

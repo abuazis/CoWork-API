@@ -27,6 +27,20 @@ router.post(
   authController.logout
 );
 
+/// Router post for send verification function
+router.post(
+  "/send-verification",
+  validate(authValidation.sendVerification),
+  authController.sendVerification,
+);
+
+/// Router post for check verification function
+router.post(
+  "/check-verification",
+  validate(authValidation.checkVerification),
+  authController.checkVerification,
+);
+
 /// Router post for refresh function
 router.post(
   "/refresh-token",

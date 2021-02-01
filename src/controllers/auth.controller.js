@@ -5,6 +5,7 @@ const {
   tokenService,
   authService,
   emailService,
+  verificationService,
 } = require("../services");
 
 /// Register new user account and generate auth tokens
@@ -25,6 +26,20 @@ const login = catchAsync(async (req, res) => {
 /// Push out logged user account
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+/// Send verification code to user account
+const sendVerification = catchAsync(async (req, res) => {
+  const { userId, email } = req.body;
+  const verification = await verificationService.createVerification(userId);
+  await emailService.sendVerificationCode(email, verification.code);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+/// Check requested verification code
+const checkVerification = catchAsync(async (req, res) => {
+  await verificationService.checkVerification(req.body);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -53,6 +68,8 @@ module.exports = {
   register,
   login,
   logout,
+  sendVerification,
+  checkVerification,
   refreshTokens,
   forgotPassword,
   resetPassword,

@@ -9,7 +9,6 @@ const userSchema = mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trim: true,
     },
     email: {
       type: String,
@@ -31,6 +30,19 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: "user",
     },
+    birth: {
+      type: String,
+    },
+    cover: {
+      type: String,
+    },
+    photo: {
+      type: String,
+    },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
@@ -39,10 +51,16 @@ const userSchema = mongoose.Schema(
 userSchema.plugin(toJSON);
 userSchema.plugin(paginate);
 
-/// Check if user email has been registered
+/// Check is user email has been registered
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
+};
+
+/// Check is user email has been verified
+userSchema.statics.isEmailVerified = async function (email, excludeUserId) {
+  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  return user.verified;
 };
 
 /// Check if new password request is match with old password
@@ -51,7 +69,7 @@ userSchema.methods.isPasswordMatch = async function (password) {
   return bcrypt.compare(password, user.password);
 };
 
-/// Add pre method schema on save is called 
+/// Add pre method schema on save is called
 userSchema.pre("save", async function (next) {
   const user = this;
   if (user.isModified("password")) {
