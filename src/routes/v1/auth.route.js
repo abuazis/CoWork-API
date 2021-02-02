@@ -1,7 +1,9 @@
 const express = require("express");
+const multer = require("multer");
 const validate = require("../../middlewares/validate");
 const authValidation = require("../../validations/auth.validation");
 const authController = require("../../controllers/auth.controller");
+const { multerStorage, multerFilter } = require("../../config/multer");
 
 /// Define express router
 const router = express.Router();
@@ -9,6 +11,10 @@ const router = express.Router();
 /// Router post for register function
 router.post(
   "/register",
+  multer({
+    storage: multerStorage,
+    fileFilter: multerFilter,
+  }).single("photo"),
   validate(authValidation.register),
   authController.register
 );
