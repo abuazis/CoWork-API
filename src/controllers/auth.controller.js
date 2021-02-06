@@ -1,5 +1,6 @@
 const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
+const ApiError = require("../utils/ApiError");
 const {
   userService,
   tokenService,
@@ -29,6 +30,16 @@ const login = catchAsync(async (req, res) => {
 /// Push out logged user account
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+/// Check existence specific user data by email
+const checkEmail = catchAsync(async (req, res) => {
+  console.log(req.body.email);
+  const user = await userService.getUserByEmail(req.body.email);
+  if (user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
+  }
   res.status(httpStatus.NO_CONTENT).send();
 });
 
@@ -71,6 +82,7 @@ module.exports = {
   register,
   login,
   logout,
+  checkEmail,
   sendVerification,
   checkVerification,
   refreshTokens,

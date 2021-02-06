@@ -25,6 +25,13 @@ const logout = {
   }),
 };
 
+/// Check email validation request
+const checkEmail = {
+  body: Joi.object().keys({
+    email: Joi.string().required(),
+  }),
+};
+
 /// Send verification validation request
 const sendVerification = {
   body: Joi.object().keys({
@@ -69,6 +76,7 @@ module.exports = {
   register,
   login,
   logout,
+  checkEmail,
   sendVerification,
   checkVerification,
   refreshTokens,

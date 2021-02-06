@@ -53,7 +53,11 @@ userSchema.plugin(paginate);
 
 /// Check is user email has been registered
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
-  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  const user = await this.findOne({
+    verified: true,
+    email,
+    _id: { $ne: excludeUserId },
+  });
   return !!user;
 };
 

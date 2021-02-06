@@ -33,6 +33,13 @@ router.post(
   authController.logout
 );
 
+/// Router post for check email function
+router.post(
+  "/check-email",
+  validate(authValidation.checkEmail),
+  authController.checkEmail
+);
+
 /// Router post for send verification function
 router.post(
   "/send-verification",
