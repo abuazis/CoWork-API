@@ -82,6 +82,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+/// Add pre method schema on findOneAndUpdate is called
+userSchema.pre("findOneAndUpdate", async function () {
+  this._update.password = await bcrypt.hash(this._update.password, 8);
+});
+
 /// Register mongoose model for user schema
 const User = mongoose.model("User", userSchema);
 
