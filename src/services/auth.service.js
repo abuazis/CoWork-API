@@ -27,7 +27,7 @@ const logout = async (refreshToken) => {
   if (!refreshToken) {
     throw new ApiError(httpStatus.NOT_FOUND, "Not Found");
   }
-  await refreshTokenDoc.remove(userId, email);
+  await refreshTokenDoc.remove();
 };
 
 /// Refresh authenticated user token refresh
