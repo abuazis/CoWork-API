@@ -29,7 +29,7 @@ const tokenSchema = mongoose.Schema(
       default: false,
     },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 /// Call schema plugin

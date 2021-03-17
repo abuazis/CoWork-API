@@ -10,12 +10,12 @@ const router = express.Router();
 /// Router post, get for get users, create users function
 router.route("/")
 .post(
-  auth("manageUsers"),
+  auth("manage"),
   validate(userValidation.createUser),
   userController.createUser
 )
 .get(
-  auth("getUsers"),
+  auth("get"),
   validate(userValidation.getUsers),
   userController.getUsers
 );
@@ -23,17 +23,17 @@ router.route("/")
 /// Router get, pacth, delete for get user, update user, delete user function
 router.route("/:userId")
 .get(
-  auth("getUsers"),
+  auth("get"),
   validate(userValidation.getUser),
   userController.getUser
 )
 .patch(
-  auth("manageUsers"),
+  auth("manage"),
   validate(userValidation.updateUser),
   userController.updateUser
 )
 .delete(
-  auth("manageUsers"),
+  auth("manage"),
   validate(userValidation.deleteUser),
   userController.deleteUser
 );

@@ -45,8 +45,8 @@ const checkEmail = catchAsync(async (req, res) => {
 
 /// Send verification code to user account
 const sendVerification = catchAsync(async (req, res) => {
-  const { userId, email } = req.body;
-  const verification = await verificationService.createVerification(userId);
+  const { id, email } = req.body;
+  const verification = await verificationService.createVerification(id);
   await emailService.sendVerificationCode(email, verification.code);
   res.status(httpStatus.NO_CONTENT).send();
 });

@@ -32,12 +32,12 @@ const getUserByEmail = async (email) => {
 };
 
 /// Update user document by id
-const updateUserById = async (userId, updateBody) => {
-  const user = await getUserById(userId);
+const updateUserById = async (id, updateBody) => {
+  const user = await getUserById(id);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
-  if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
+  if (updateBody.email && (await User.isEmailTaken(updateBody.email, id))) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Email already taken");
   }
   Object.assign(user, updateBody);
@@ -46,8 +46,8 @@ const updateUserById = async (userId, updateBody) => {
 };
 
 /// Delete user document by id
-const deleteUserById = async (userId) => {
-  const user = await getUserById(userId);
+const deleteUserById = async (id) => {
+  const user = await getUserById(id);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }

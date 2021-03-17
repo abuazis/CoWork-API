@@ -35,7 +35,7 @@ const checkEmail = {
 /// Send verification validation request
 const sendVerification = {
   body: Joi.object().keys({
-    userId: Joi.string().required(),
+    id: Joi.string().required(),
     email: Joi.string().required(),
   }),
 };
@@ -43,7 +43,7 @@ const sendVerification = {
 /// Check verification validation request
 const checkVerification = {
   body: Joi.object().keys({
-    userId: Joi.string().required(),
+    id: Joi.string().required(),
     code: Joi.number().required().min(1000).max(9999),
   }),
 };

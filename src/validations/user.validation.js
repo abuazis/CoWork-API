@@ -8,14 +8,18 @@ const createUser = {
     email: Joi.string().required().email(),
     password: Joi.string().required().custom(password),
     role: Joi.string().required().valid("user", "admin"),
+    birth: Joi.date(),
+    verified: Joi.boolean().default(false),
   }),
 };
 
-/// Get users validation request 
+/// Get users validation request
 const getUsers = {
   query: Joi.object().keys({
     name: Joi.string(),
+    email: Joi.string().email(),
     role: Joi.string(),
+    verified: Joi.boolean(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -25,26 +29,28 @@ const getUsers = {
 /// Get user validation request
 const getUser = {
   params: Joi.object().keys({
-    userId: Joi.string().custom(objectId),
+    id: Joi.string().custom(objectId),
   }),
 };
 
-/// Update user validation request 
+/// Update user validation request
 const updateUser = {
   params: Joi.object().keys({
-    userId: Joi.required().custom(objectId),
+    id: Joi.required().custom(objectId),
   }),
-  body: Joi.object() .keys({
-    email: Joi.string().email(),
-    password: Joi.string().custom(password),
-    name: Joi.string(),
+  body: Joi.object().keys({
+    name: Joi.string().required(),
+    email: Joi.string().required().email(),
+    password: Joi.string().required().custom(password),
+    birth: Joi.date(),
+    verified: Joi.boolean().default(false),
   }).min(1),
 };
 
-/// Delete user validation request 
+/// Delete user validation request
 const deleteUser = {
   params: Joi.object().keys({
-    userId: Joi.string().custom(objectId),
+    id: Joi.string().custom(objectId),
   }),
 };
 
